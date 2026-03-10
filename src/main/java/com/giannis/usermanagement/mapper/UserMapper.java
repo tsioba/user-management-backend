@@ -12,7 +12,6 @@ import java.util.List;
 @Component
 public class UserMapper {
 
-
     public UserDTO toDTO(User user) {
         if (user == null) {
             return null;
@@ -40,7 +39,6 @@ public class UserMapper {
         return dto;
     }
 
-
     public User toEntity(UserDTO dto) {
         if (dto == null) {
             return null;
@@ -67,5 +65,28 @@ public class UserMapper {
         }
 
         return user;
+    }
+
+    public void updateEntityFromDTO(UserDTO dto, User existingUser) {
+        if (dto == null) {
+            return;
+        }
+
+        existingUser.setName(dto.getName());
+        existingUser.setSurname(dto.getSurname());
+        existingUser.setGender(dto.getGender());
+        existingUser.setBirthdate(dto.getBirthdate());
+
+        if (dto.getAddresses() != null) {
+            existingUser.getAddresses().clear();
+            for (AddressDTO addressDTO : dto.getAddresses()) {
+                Address address = new Address();
+                address.setId(addressDTO.getId());
+                address.setType(addressDTO.getType());
+                address.setDetails(addressDTO.getDetails());
+                address.setUser(existingUser);
+                existingUser.getAddresses().add(address);
+            }
+        }
     }
 }

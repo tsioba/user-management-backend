@@ -16,10 +16,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Not Found");
-        body.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        String errorLabel = "Server Error";
+
+        if (ex.getMessage().contains("not found")) {
+            status = HttpStatus.NOT_FOUND;
+            errorLabel = "Not Found";
+        } else if (ex.getMessage().contains("already exists")) {
+            status = HttpStatus.CONFLICT;
+            errorLabel = "Conflict";
+        }
+
+        body.put("status", status.value());
+        body.put("error", errorLabel);
+        body.put("message", ex.getMessage());
+        System.out.println("Exception caught: " + ex.getMessage());
+
+        return new ResponseEntity<>(body, status);
     }
 }
