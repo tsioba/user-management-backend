@@ -1,5 +1,6 @@
 package com.giannis.usermanagement.dto;
 
+import com.giannis.usermanagement.model.AddressType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddressDTO {
     private Long id;
-    private String type;
+    private AddressType type;
     private String details;
 }
