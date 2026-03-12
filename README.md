@@ -1,15 +1,16 @@
-# 🚀 User Management API
+# User Management API
 
-Ένα γρήγορο, καθαρό και επεκτάσιμο RESTful API φτιαγμένο με **Spring Boot** για τη διαχείριση χρηστών και των διευθύνσεών τους. Το project χρησιμοποιεί αρχιτεκτονική βασισμένη σε DTOs, διαθέτει custom exception handling και η βάση δεδομένων (MySQL) είναι στημένη σε Docker.
+Ένα αποδοτικό και επεκτάσιμο RESTful API, αναπτυγμένο με **Spring Boot**, για την ασφαλή διαχείριση χρηστών και των διευθύνσεών τους. Το project ακολουθεί αρχιτεκτονική βασισμένη σε DTOs, ενσωματώνει κεντρική διαχείριση σφαλμάτων (global exception handling) και είναι πλήρως containerized μέσω Docker για άμεση και απρόσκοπτη εκτέλεση σε οποιοδήποτε περιβάλλον.
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **Γλώσσα:** Java 25
+* **Γλώσσα Προγραμματισμού:** Java 25
 * **Framework:** Spring Boot 4.0.3
-* **Βάση Δεδομένων:** MySQL (Dockerized)
-* **ORM:** Spring Data JPA / Hibernate
+* **Βάση Δεδομένων:** MySQL 8.0 
+* **ORM / Data Access:** Spring Data JPA / Hibernate
+* **Containerization:** Docker & Docker Compose
 * **Build Tool:** Maven
 * **Άλλα Εργαλεία:** Lombok 
 
@@ -17,37 +18,44 @@
 
 ## ✨ Βασικά Χαρακτηριστικά (Features)
 
-* **Πλήρες CRUD:** Λειτουργίες δημιουργίας, ανάγνωσης, ενημέρωσης και διαγραφής χρηστών.
-* **Σχέσεις Βάσης:** `One-To-Many` σχέση ανάμεσα σε Χρήστες και τις Διευθύνσεις τους (Home, Work κτλ.).
-* **Έξυπνο Mapping:** Χρήση custom Mapper για την ασφαλή μετατροπή των Entities σε DTOs και το αντίστροφο.
-* **Validation & Business Logic:** Αποτροπή δημιουργίας χρηστών με το ίδιο ακριβώς Ονοματεπώνυμο.
-* **Global Exception Handling:** Κεντρική διαχείριση σφαλμάτων (`@RestControllerAdvice`) που επιστρέφει καθαρά JSON μηνύματα στον client (π.χ. 404 Not Found, 409 Conflict).
+* **Πλήρες CRUD Operations:** Λειτουργίες δημιουργίας, ανάγνωσης, ενημέρωσης και διαγραφής εγγραφών χρηστών.
+* **Σχέσεις Δεδομένων:** Υλοποίηση `One-To-Many` σχέσης ανάμεσα στα entities `User` και `Address` .
+* **Data Transfer Objects (DTOs):** Χρήση custom Mapper για την ασφαλή και ελεγχόμενη μεταφορά δεδομένων (serialization/deserialization) μεταξύ client και server.
+* **Validation & Business Logic:** Εφαρμογή κανόνων εγκυρότητας, όπως η αποτροπή δημιουργίας χρηστών με πανομοιότυπο ονοματεπώνυμο.
+* **Global Exception Handling:** Κεντρική διαχείριση σφαλμάτων μέσω `@RestControllerAdvice` για την επιστροφή τυποποιημένων και κατανοητών JSON μηνυμάτων (π.χ. 404 Not Found, 409 Conflict).
+* **Automated Database Seeding:** Αυτόματη δημιουργία του σχήματος της βάσης και εισαγωγή αρχικών δεδομένων (mock data) κατά την εκκίνηση του container, διευκολύνοντας την άμεση αξιολόγηση του API.
 
 ---
 
-## ⚙️ Εγκατάσταση & Εκτέλεση (Setup)
+## ⚙️ Οδηγίες Εγκατάστασης & Εκτέλεσης
 
 ### 1. Προαπαιτούμενα
-Βεβαιώσου ότι έχεις εγκατεστημένα στο μηχάνημά σου:
-* Java (JDK 25)
-* Maven
-* Docker (για τη βάση δεδομένων)
+Η εφαρμογή είναι πλήρως containerized. Επομένως, δεν απαιτείται τοπική εγκατάσταση της Java ή του Maven. Η μόνη προϋπόθεση για το σύστημά σας είναι η εγκατάσταση του:
+* **Docker** & **Docker Compose**
 
-### 2. Στήσιμο Βάσης Δεδομένων (Docker)
-Εφόσον η βάση τρέχει σε Docker, σήκωσε γρήγορα ένα MySQL container με τις σωστές ρυθμίσεις τρέχοντας την παρακάτω εντολή στο terminal:
+### 2. Άμεση Εκτέλεση (Production-like περιβάλλον)
+Για να εκτελέσετε ταυτόχρονα το Backend API και τη Βάση Δεδομένων, ανοίξτε ένα τερματικό (terminal) στον ριζικό φάκελο του project και εκτελέστε την ακόλουθη εντολή:
 
 ```bash
-docker run --name usermanagement-mysql -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=user_management -p 3306:3306 -d mysql:latest
+docker compose up --build
 ```
 
-### 3. Build & Τρέξιμο του Project
-Αφού σηκωθεί η βάση, κατέβασε το project στον υπολογιστή σου και τρέξε το μέσω Maven:
+Η παραπάνω εντολή αναλαμβάνει αυτοματοποιημένα τα εξής:
+1. Την εκκίνηση της **MySQL** βάσης δεδομένων.
+2. Τη μεταγλώττιση (build) και εκτέλεση της **Spring Boot** εφαρμογής.
+3. Τη δημιουργία των πινάκων και την εισαγωγή των αρχικών (mock) χρηστών.
 
-```bash
-mvn clean install
-mvn spring-boot:run
-```
-🎉 Το API θα είναι πλέον διαθέσιμο στο: `http://localhost:8080/api/users`
+Το API καθίσταται άμεσα διαθέσιμο στη διεύθυνση: `http://localhost:8080/api/users`
+
+*(Για τον τερματισμό της εφαρμογής και την εκκαθάριση των containers, εκτελέστε: `docker compose down`)*
+
+### 3. Τοπική Ανάπτυξη (Local Development)
+Σε περίπτωση που επιθυμείτε να εκτελέσετε την εφαρμογή μέσω του IDE σας (απαιτείται τοπική εγκατάσταση JDK & Maven):
+1. Εκκινήστε αποκλειστικά τον container της βάσης δεδομένων στο παρασκήνιο: 
+   ```bash
+   docker compose up mysqldb -d
+   ```
+2. Εκτελέστε το Spring Boot project μέσω του IDE (π.χ. IntelliJ) ή τρέχοντας `mvn spring-boot:run`.
 
 ---
 
@@ -55,17 +63,17 @@ mvn spring-boot:run
 
 | HTTP Method | Endpoint | Περιγραφή |
 | :--- | :--- | :--- |
-| `GET` | `/api/users` | Επιστρέφει λίστα με όλους τους χρήστες. |
-| `GET` | `/api/users/{id}` | Επιστρέφει τα στοιχεία ενός συγκεκριμένου χρήστη. |
-| `POST` | `/api/users` | Δημιουργεί έναν νέο χρήστη. |
-| `PUT` | `/api/users/{id}` | Κάνει update τα στοιχεία ενός υπάρχοντος χρήστη. |
-| `DELETE` | `/api/users/{id}` | Διαγράφει έναν χρήστη (μαζί με τις διευθύνσεις του). |
+| `GET` | `/api/users` | Επιστρέφει τη λίστα με όλους τους εγγεγραμμένους χρήστες. |
+| `GET` | `/api/users/{id}` | Επιστρέφει τα αναλυτικά στοιχεία ενός συγκεκριμένου χρήστη. |
+| `POST` | `/api/users` | Δημιουργεί μια νέα εγγραφή χρήστη. |
+| `PUT` | `/api/users/{id}` | Ενημερώνει τα στοιχεία ενός υπάρχοντος χρήστη. |
+| `DELETE` | `/api/users/{id}` | Διαγράφει οριστικά έναν χρήστη και τις συσχετιζόμενες διευθύνσεις του. |
 
 ---
 
 ## 📝 Παράδειγμα JSON Request
 
-Για να δημιουργήσεις έναν νέο χρήστη (`POST /api/users`), στείλε το παρακάτω JSON body:
+Δομή του JSON payload για τη δημιουργία ενός νέου χρήστη μέσω `POST /api/users`:
 
 ```json
 {
@@ -75,11 +83,11 @@ mvn spring-boot:run
   "birthdate": "1990-05-15",
   "addresses": [
     {
-      "type": "Home",
+      "type": "HOME",
       "details": "Αριστοτέλους 10, Αθήνα"
     },
     {
-      "type": "Work",
+      "type": "WORK",
       "details": "Ερμού 25, Αθήνα"
     }
   ]
@@ -89,4 +97,4 @@ mvn spring-boot:run
 ---
 
 ## 👨‍💻 Δημιουργός
-Αναπτύχθηκε από τον **[Γιάννης]**.
+Αναπτύχθηκε από τον **Tsioba**.
