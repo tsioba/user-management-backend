@@ -71,6 +71,14 @@ docker compose up --build
 
 ---
 
+## 📖 Interactive API Documentation (Swagger UI)
+
+Το API παρέχει πλήρως αυτοματοποιημένη και διαδραστική τεκμηρίωση μέσω **OpenAPI / Swagger**. Μετά την εκκίνηση της εφαρμογής, μπορείτε να εξερευνήσετε τα διαθέσιμα endpoints, να δείτε τα αναμενόμενα payloads (schemas) και να εκτελέσετε δοκιμαστικές κλήσεις (Try it out) απευθείας από τον browser σας, χωρίς την ανάγκη εξωτερικών εργαλείων όπως το Postman.
+
+👉 **Πρόσβαση στο Swagger UI:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+---
+
 ## 📝 Παράδειγμα JSON Request
 
 Δομή του JSON payload για τη δημιουργία ενός νέου χρήστη μέσω `POST /api/users`:
